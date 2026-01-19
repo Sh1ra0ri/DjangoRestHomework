@@ -44,6 +44,7 @@ MANIFEST
 
 # PyCharm и IDE
 .idea/
+.idea
 .vscode/
 *.swp
 *.swo
