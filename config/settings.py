@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "materials",
     "users",
+    "django_filters",
 ]
 
 MIDDLEWARE = [
@@ -77,7 +78,6 @@ DATABASES = {
         "PORT": os.getenv("PORT"),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
