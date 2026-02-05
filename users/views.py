@@ -1,13 +1,11 @@
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import viewsets, permissions
+from rest_framework import generics, permissions, viewsets
 from rest_framework.filters import OrderingFilter
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 
-from users.models import Payment
-from users.serializers import PaymentSerializer
-from rest_framework import generics
-from users.models import User
-from users.serializers import UserSerializer
+from users.models import Payment, User
+from users.serializers import PaymentSerializer, UserSerializer
+
 
 # Create your views here.
 class PaymentViewSet(viewsets.ModelViewSet):
@@ -18,6 +16,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
     ordering_fields = ("date",)
     permission_classes = (AllowAny,)
 
+
 class UserCreateAPIView(generics.CreateAPIView):
     serializer_class = UserSerializer
     queryset = User.objects.all()
@@ -27,4 +26,3 @@ class UserCreateAPIView(generics.CreateAPIView):
         user = serializer.save(is_active=True)
         user.set_password(user.password)
         user.save()
-

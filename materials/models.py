@@ -1,5 +1,6 @@
-from django.db import models
 from django.contrib.auth.models import User
+from django.db import models
+
 
 class Course(models.Model):
     title = models.CharField(
@@ -15,7 +16,9 @@ class Course(models.Model):
         verbose_name="Превью",
         help_text="Загрузите превью",
     )
-    owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Владелец")
+    owner = models.ForeignKey(
+        User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Владелец"
+    )
 
     class Meta:
         verbose_name = "Курс"
@@ -43,7 +46,21 @@ class Lesson(models.Model):
         help_text="Укажите ссылку на видео",
     )
     course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name="Курс")
-    owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Владелец")
+    owner = models.ForeignKey(
+        User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Владелец"
+    )
+
     class Meta:
         verbose_name = "Урок"
         verbose_name_plural = "Уроки"
+
+
+class Subscription(models.Model):
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, verbose_name="Пользователь"
+    )
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name="Курс")
+
+    class Meta:
+        verbose_name = "Подписка"
+        verbose_name_plural = "Подписки"
