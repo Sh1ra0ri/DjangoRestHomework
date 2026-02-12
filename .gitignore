@@ -50,3 +50,9 @@ MANIFEST
 *.swo
 *~
 .DS_Store
+
+.coverage
+htmlcov/
+*.cover
+.hypothesis/
+.pytest_cache/

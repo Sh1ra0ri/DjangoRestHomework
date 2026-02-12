@@ -9,7 +9,9 @@ from materials.models import Course, Lesson, Subscription
 class LessonTestCase(APITestCase):
 
     def setUp(self):
-        self.user = User.objects.create(username="testuser")
+        self.user = User.objects.create(email="testuser@test.com")
+        self.user.set_password("testpass123")
+        self.user.save()
         self.course = Course.objects.create(title="Test Course", owner=self.user)
         self.lesson = Lesson.objects.create(
             title="Test Lesson",
@@ -20,7 +22,7 @@ class LessonTestCase(APITestCase):
         self.client.force_authenticate(user=self.user)
 
     def test_lesson_retrieve(self):
-        url = reverse("materials:lesson-detail", args=[self.lesson.pk])
+        url = reverse("materials:lesson-retrieve", args=[self.lesson.pk])
         response = self.client.get(url)
         data = response.json()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -39,7 +41,7 @@ class LessonTestCase(APITestCase):
 
     def test_lesson_update(self):
         url = reverse("materials:lesson-update", args=[self.lesson.pk])
-        data = {"title": "Updated Lesson"}
+        data = {"title": "Updated Lesson", "course": self.course.id}
         response = self.client.patch(url, data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.json().get("title"), "Updated Lesson")
@@ -59,7 +61,9 @@ class LessonTestCase(APITestCase):
 class SubscriptionTestCase(APITestCase):
 
     def setUp(self):
-        self.user = User.objects.create(username="testuser")
+        self.user = User.objects.create(email="testuser@test.com")
+        self.user.set_password("testpass123")
+        self.user.save()
         self.course = Course.objects.create(title="Test Course")
         self.client.force_authenticate(user=self.user)
 
