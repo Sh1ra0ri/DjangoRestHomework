@@ -1,8 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-
 from materials.models import Course, Lesson
-
 
 class User(AbstractUser):
     email = models.EmailField(
@@ -42,7 +40,7 @@ class Payment(models.Model):
         verbose_name="Пользователь",
     )
 
-    date = models.DateField(verbose_name="", help_text="", auto_now_add=True)
+    date = models.DateField(verbose_name="Дата оплаты", auto_now_add=True)
 
     paid_course = models.ForeignKey(
         Course,
@@ -60,15 +58,43 @@ class Payment(models.Model):
         related_name="paid_lesson",
         blank=True,
     )
-    total = models.PositiveSmallIntegerField(verbose_name="Сумма")
+    total = models.PositiveSmallIntegerField(verbose_name="Сумма оплаты")
+
     PAYMENT_METHOD_CHOICES = [
         ("Наличные", "Наличные"),
         ("Перевод на счет", "Перевод на счет"),
+        ("Stripe", "Оплата картой онлайн"),
     ]
     payment_method = models.CharField(
         max_length=20, choices=PAYMENT_METHOD_CHOICES, verbose_name="Способ оплаты"
     )
 
+    session_id = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True,
+        verbose_name="ID сессии Stripe"
+    )
+    link = models.URLField(
+        max_length=500,
+        blank=True,
+        null=True,
+        verbose_name="Ссылка на оплату Stripe"
+    )
+    status = models.CharField(
+        max_length=50,
+        default='pending',
+        verbose_name="Статус оплаты",
+        choices=[
+            ('pending', 'Ожидает оплаты'),
+            ('paid', 'Оплачено'),
+            ('failed', 'Ошибка оплаты'),
+        ]
+    )
+
     class Meta:
         verbose_name = "Платеж"
         verbose_name_plural = "Платежи"
+
+    def __str__(self):
+        return f"{self.user.email} - {self.total} руб."

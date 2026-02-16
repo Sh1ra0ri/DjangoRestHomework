@@ -14,9 +14,9 @@ urlpatterns = router.urls
 
 urlpatterns = [
     path(
-        "reqister/",
+        "register/",
         UserCreateAPIView.as_view(permission_classes=(AllowAny,)),
-        name="reqister",
+        name="register",
     ),
     path(
         "login/",
@@ -28,4 +28,11 @@ urlpatterns = [
         TokenRefreshView.as_view(permission_classes=(AllowAny,)),
         name="token_refresh",
     ),
+    path(
+        "create-payment/",
+        StripePaymentCreateView.as_view(),
+        name="create-payment",
+    ),
 ]
+
+urlpatterns += router.urls
