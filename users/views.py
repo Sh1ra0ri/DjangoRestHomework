@@ -38,7 +38,7 @@ class StripePaymentCreateView(APIView):
     permission_classes = (IsAuthenticated,)
 
     def post(self, request):
-        course_id = request.data.get('course_id')
+        course_id = request.data.get("course_id")
         course = get_object_or_404(Course, id=course_id)
 
         product = create_stripe_product(course.title)
@@ -49,10 +49,10 @@ class StripePaymentCreateView(APIView):
             user=request.user,
             paid_course=course,
             total=course.price,
-            payment_method='Stripe',
+            payment_method="Stripe",
             session_id=session.id,
             link=session.url,
-            status='pending'
+            status="pending",
         )
 
-        return Response({'payment_link': session.url}, status=status.HTTP_201_CREATED)
+        return Response({"payment_link": session.url}, status=status.HTTP_201_CREATED)

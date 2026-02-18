@@ -12,6 +12,8 @@ from materials.pagination import MaterialsPagination
 from materials.permissions import IsModerator, IsOwner
 from materials.serializers import CourseSerializer, LessonSerializer
 
+from .tasks import send_course_update_email
+
 
 class CourseViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
@@ -34,6 +36,13 @@ class CourseViewSet(viewsets.ModelViewSet):
         elif self.action in ["update", "partial_update"]:
             self.permission_classes = [IsAuthenticated, IsModerator | IsOwner]
         return [permission() for permission in self.permission_classes]
+
+    def perform_update(self, serializer):
+        course = serializer.save()
+        subscribers = Subscription.objects.filter(course=course)
+
+        for sub in subscribers:
+            send_course_update_email.delay(sub.user.email, course.title)
 
 
 class LessonCreateAPIView(CreateAPIView):

@@ -1,6 +1,8 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+
 from materials.models import Course, Lesson
+
 
 class User(AbstractUser):
     email = models.EmailField(
@@ -70,26 +72,20 @@ class Payment(models.Model):
     )
 
     session_id = models.CharField(
-        max_length=255,
-        blank=True,
-        null=True,
-        verbose_name="ID сессии Stripe"
+        max_length=255, blank=True, null=True, verbose_name="ID сессии Stripe"
     )
     link = models.URLField(
-        max_length=500,
-        blank=True,
-        null=True,
-        verbose_name="Ссылка на оплату Stripe"
+        max_length=500, blank=True, null=True, verbose_name="Ссылка на оплату Stripe"
     )
     status = models.CharField(
         max_length=50,
-        default='pending',
+        default="pending",
         verbose_name="Статус оплаты",
         choices=[
-            ('pending', 'Ожидает оплаты'),
-            ('paid', 'Оплачено'),
-            ('failed', 'Ошибка оплаты'),
-        ]
+            ("pending", "Ожидает оплаты"),
+            ("paid", "Оплачено"),
+            ("failed", "Ошибка оплаты"),
+        ],
     )
 
     class Meta:

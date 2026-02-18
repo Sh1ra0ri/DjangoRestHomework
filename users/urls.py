@@ -5,7 +5,8 @@ from rest_framework_simplejwt.views import (TokenObtainPairView,
                                             TokenRefreshView)
 
 from users.apps import UsersConfig
-from users.views import PaymentViewSet, UserCreateAPIView, StripePaymentCreateView
+from users.views import (PaymentViewSet, StripePaymentCreateView,
+                         UserCreateAPIView)
 
 app_name = UsersConfig.name
 router = SimpleRouter()
