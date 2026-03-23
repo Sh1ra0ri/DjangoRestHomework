@@ -87,7 +87,7 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd ~/app
-            git pull origin main
-            docker compose down
-            docker compose up -d --build
+            cd /home/shiro/app
+            git pull --rebase origin develop
+            docker-compose down
+            docker-compose up -d --build
