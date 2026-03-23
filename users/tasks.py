@@ -14,3 +14,5 @@ def deactivate_inactive_users():
     users = User.objects.filter(last_login__lt=month_ago, is_active=True)
 
     users.update(is_active=False)
+
+

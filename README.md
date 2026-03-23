@@ -1,29 +1,33 @@
-## Запуск проекта
+## Настройка CI/CD и деплоя на сервер
 
-### 1. Клонировать репозиторий
-```bash
-git clone <ссылка на репозиторий>
-cd <папка проекта>
-```
+### Секреты GitHub Actions
+Добавь в Settings → Secrets and variables → Actions:
 
-### 2. Создать .env файл
+| Секрет | Описание |
+|---|---|
+| `SERVER_HOST` | IP-адрес сервера |
+| `SERVER_USER` | Пользователь SSH (например, `ubuntu`) |
+| `SSH_PRIVATE_KEY` | Приватный SSH-ключ |
+
+### Подготовка сервера
 ```bash
+# Установить Docker
+sudo apt update && sudo apt install -y docker.io docker-compose-plugin
+
+# Клонировать репозиторий
+git clone https://github.com/Sh1ra0ri/DjangoRestHomework ~/app
+cd ~/app
+
+# Создать .env файл
 cp .env.example .env
+nano .env
+
+# Первый запуск
+docker compose up -d --build
 ```
 
-### 3. Запустить
-```bash
-docker-compose up --build
-```
-
-### 4. Проверка сервисов
-- **web** — http://localhost:8000
-- **db** — docker-compose logs db
-- **redis** — docker-compose logs redis
-- **celery** — docker-compose logs celery
-- **celery_beat** — docker-compose logs celery_beat
-
-### 5. Остановить
-```bash
-docker-compose down
-```
+### Как работает CI/CD
+После каждого `push` в ветку `main` автоматически:
+1. Запускаются тесты
+2. Проверяется сборка Docker-образов
+3. Проект деплоится на сервер
